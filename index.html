@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generator Prompt AI ATP — Kurikulum Merdeka</title>
+  <style>
+    /* =====================================================================
+       DESIGN TOKENS & RESET
+       Modern educational editorial palette with high contrast & touch targets
+       ===================================================================== */
+    :root {
+      --bg-page: #f4f6fb;
+      --bg-surface: #ffffff;
+      --bg-subtle: #eef2f8;
+      --bg-accent-soft: #e8f0fe;
+      --bg-success-soft: #e6f4ea;
+      --bg-code: #0f172a;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --text-on-code: #e2e8f0;
+      --border-light: #e2e8f0;
+      --border-focus: #1d4ed8;
+      --primary: #1d4ed8;
+      --primary-hover: #1e40af;
+      --secondary-btn: #f1f5f9;
+      --secondary-btn-hover: #e2e8f0;
+      --success: #15803d;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 6px 20px rgba(15, 23, 42, 0.06);
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+
+    /* =====================================================================
+       HEADER & HERO BAR
+       ===================================================================== */
+    .app-header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 55%, #0284c7 100%);
+      color: #ffffff;
+      padding: 1.5rem 1rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: 0.25rem 0.7rem;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .app-title {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .app-subtitle {
+      margin: 0;
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 72ch;
+    }
+
+    /* =====================================================================
+       MAIN RESPONSIVE GRID LAYOUT
+       ===================================================================== */
+    .main-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      width: 100%;
+    }
+
+    @media (min-width: 1024px) {
+      .main-container {
+        grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+        align-items: start;
+        gap: 1.5rem;
+        padding: 1.75rem 1.5rem 3.5rem;
+      }
+
+      .preview-column {
+        position: sticky;
+        top: 1.25rem;
+      }
+    }
+
+    .form-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      min-width: 0;
+    }
+
+    /* =====================================================================
+       CARDS & FORM SECTIONS
+       ===================================================================== */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+      width: 100%;
+    }
+
+    @media (min-width: 640px) {
+      .card {
+        padding: 1.5rem;
+      }
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .card-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .step-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: var(--radius-pill);
+      background: var(--bg-accent-soft);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .card-desc {
+      margin: 0.15rem 0 0;
+      font-size: 0.83rem;
+      color: var(--text-muted);
+    }
+
+    /* =====================================================================
+       FORM CONTROLS (TOUCH FRIENDLY & FLUID)
+       ===================================================================== */
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .field-grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .field-grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      min-width: 0;
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .label-hint {
+      font-weight: 400;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    select,
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      min-height: 44px;
+      padding: 0.65rem 0.85rem;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      color: var(--text-primary);
+      background-color: var(--bg-surface);
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius-sm);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+
+    select:focus,
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.16);
+    }
+
+    textarea {
+      min-height: 104px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .custom-input-box {
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      background: var(--bg-subtle);
+      border: 1px dashed #94a3b8;
+      border-radius: var(--radius-sm);
+      display: none;
+    }
+
+    .custom-input-box.is-visible {
+      display: block;
+    }
+
+    .custom-input-box label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+
+    /* =====================================================================
+       JP CALCULATION MODE SWITCH & SUMMARY BANNER
+       ===================================================================== */
+    .mode-toggle-group {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      background: var(--bg-subtle);
+      padding: 0.3rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.9rem;
+      width: 100%;
+    }
+
+    .mode-btn {
+      flex: 1 1 160px;
+      min-height: 40px;
+      padding: 0.5rem 0.75rem;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .mode-btn.is-active {
+      background: var(--bg-surface);
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .jp-summary-banner {
+      margin-top: 0.9rem;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg-accent-soft);
+      border: 1px solid #bfdbfe;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .jp-total-badge {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .jp-formula-text {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+    }
+
+    .validation-msg {
+      margin-top: 0.4rem;
+      font-size: 0.8rem;
+      color: #b91c1c;
+      font-weight: 500;
+      min-height: 1.1em;
+    }
+
+    /* =====================================================================
+       QUICK-SELECT CHIPS FOR SPECIAL INSTRUCTIONS
+       ===================================================================== */
+    .chips-label-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .chips-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .chip-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      min-height: 38px;
+      padding: 0.45rem 0.8rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid #cbd5e1;
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .chip-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #f8faff;
+    }
+
+    .chip-btn.is-selected {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .chip-icon {
+      font-size: 0.85rem;
+      line-height: 1;
+    }
+
+    /* =====================================================================
+       ACTION BAR & PROMPT PREVIEW PANEL
+       ===================================================================== */
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: 0.25rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      min-height: 44px;
+      padding: 0.65rem 1.15rem;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+      flex: 1 1 auto;
+    }
+
+    @media (min-width: 640px) {
+      .btn {
+        flex: 0 1 auto;
+      }
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-primary.is-copied {
+      background: var(--success);
+    }
+
+    .btn-secondary {
+      background: var(--secondary-btn);
+      color: var(--text-primary);
+      border-color: #cbd5e1;
+    }
+
+    .btn-secondary:hover {
+      background: var(--secondary-btn-hover);
+    }
+
+    .preview-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .prompt-output {
+      width: 100%;
+      min-height: 420px;
+      max-height: 70vh;
+      padding: 1rem;
+      background: var(--bg-code);
+      color: var(--text-on-code);
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      line-height: 1.62;
+      border: 1px solid #1e293b;
+      border-radius: var(--radius-md);
+      resize: vertical;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .prompt-output:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22);
+    }
+
+    .feedback-toast {
+      margin-top: 0.65rem;
+      padding: 0.65rem 0.9rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.84rem;
+      font-weight: 500;
+      display: none;
+    }
+
+    .feedback-toast.is-visible {
+      display: block;
+    }
+
+    .feedback-toast.is-success {
+      background: var(--bg-success-soft);
+      color: var(--success);
+      border: 1px solid #bbf7d0;
+    }
+
+    .feedback-toast.is-info {
+      background: var(--bg-accent-soft);
+      color: var(--primary);
+      border: 1px solid #bfdbfe;
+    }
+
+    .usage-tip {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg-subtle);
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .usage-tip strong {
+      color: var(--text-primary);
+    }
+
+    /* =====================================================================
+       FOOTER ATTRIBUTION
+       ===================================================================== */
+    .app-footer {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1rem 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    @media (min-width: 1024px) {
+      .app-footer {
+        padding: 0 1.5rem 2.5rem;
+      }
+    }
+
+    .app-footer strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Aplikasi -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="badge-row">
+        <span class="badge">Kurikulum Merdeka</span>
+        <span class="badge">Alur Tujuan Pembelajaran (ATP)</span>
+        <span class="badge">Prompt Engineering</span>
+        <span class="badge">Dibuat oleh Z. Asmarady</span>
+      </div>
+      <h1 class="app-title">Generator Prompt AI untuk Membuat ATP</h1>
+      <p class="app-subtitle">
+        Susun prompt AI yang terstruktur, terukur, dan kontekstual untuk merancang Alur Tujuan Pembelajaran (ATP)
+        berdasarkan jenjang, fase, kelas, mata pelajaran, alokasi JP, serta instruksi khusus. Dikembangkan oleh
+        <strong>Z. Asmarady</strong>.
+      </p>
+    </div>
+  </header>
+
+  <!-- Konten Utama -->
+  <main class="main-container">
+    <!-- Kolom Input / Konfigurasi -->
+    <section class="form-column" aria-label="Pengaturan Parameter ATP">
+      <!-- Langkah 1: Jenjang, Fase & Kelas -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="step-pill">1</span>
+            <div>
+              <h2 class="card-title">Jenjang, Fase &amp; Kelas</h2>
+              <p class="card-desc">Pilih jenjang pendidikan untuk menyesuaikan fase dan kelas secara otomatis.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-grid field-grid-3">
+          <!-- Pilihan Jenjang -->
+          <div class="form-group">
+            <label for="jenjangSelect">Jenjang Pendidikan</label>
+            <select id="jenjangSelect" aria-label="Jenjang Pendidikan">
+              <option value="PAUD/TK">PAUD / TK</option>
+              <option value="SD/MI">SD / MI</option>
+              <option value="SMP/MTs" selected>SMP / MTs</option>
+              <option value="SMA/SMK/MA">SMA / SMK / MA</option>
+              <option value="__CUSTOM__">Kustom / Lainnya...</option>
+            </select>
+            <div id="customJenjangBox" class="custom-input-box">
+              <label for="customJenjangInput">Tulis Jenjang Kustom</label>
+              <input
+                type="text"
+                id="customJenjangInput"
+                placeholder="Contoh: SLB / Paket B / SMK Kejuruan"
+              />
+            </div>
+          </div>
+
+          <!-- Pilihan Fase -->
+          <div class="form-group">
+            <label for="faseSelect">Fase</label>
+            <select id="faseSelect" aria-label="Fase Kurikulum Merdeka"></select>
+            <div id="customFaseBox" class="custom-input-box">
+              <label for="customFaseInput">Tulis Fase Kustom</label>
+              <input
+                type="text"
+                id="customFaseInput"
+                placeholder="Contoh: Fase D / Fase Khusus"
+              />
+            </div>
+          </div>
+
+          <!-- Pilihan Kelas -->
+          <div class="form-group">
+            <label for="kelasSelect">Kelas</label>
+            <select id="kelasSelect" aria-label="Kelas"></select>
+            <div id="customKelasBox" class="custom-input-box">
+              <label for="customKelasInput">Tulis Kelas Kustom</label>
+              <input
+                type="text"
+                id="customKelasInput"
+                placeholder="Contoh: Kelas VIII / Kelas X RPL"
+              />
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Langkah 2: Mata Pelajaran -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="step-pill">2</span>
+            <div>
+              <h2 class="card-title">Mata Pelajaran (Mapel)</h2>
+              <p class="card-desc">Daftar mapel menyesuaikan jenjang terpilih atau dapat diketik manual.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-grid field-grid-2">
+          <div class="form-group">
+            <label for="mapelSelect">Pilih Mata Pelajaran</label>
+            <select id="mapelSelect" aria-label="Pilih Mata Pelajaran"></select>
+          </div>
+
+          <div class="form-group">
+            <label for="customMapelInput">
+              Mata Pelajaran Kustom <span class="label-hint">(opsional / jika memilih Kustom)</span>
+            </label>
+            <input
+              type="text"
+              id="customMapelInput"
+              placeholder="Contoh: Bahasa Daerah, Prakarya, Koding & AI"
+            />
+          </div>
+        </div>
+        <div id="mapelValidation" class="validation-msg" role="alert"></div>
+      </article>
+
+      <!-- Langkah 3: Alokasi Pelajaran (JP) -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="step-pill">3</span>
+            <div>
+              <h2 class="card-title">Alokasi Pelajaran (JP)</h2>
+              <p class="card-desc">Hitung otomatis total Jam Pelajaran berdasarkan periode dan pekan efektif.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mode-toggle-group" role="tablist" aria-label="Mode Perhitungan JP">
+          <button type="button" id="modeCalcBtn" class="mode-btn is-active" role="tab" aria-selected="true">
+            Hitung dari JP/Minggu &amp; Pekan
+          </button>
+          <button type="button" id="modeDirectBtn" class="mode-btn" role="tab" aria-selected="false">
+            Input Langsung Total JP
+          </button>
+        </div>
+
+        <div class="field-grid field-grid-3">
+          <div class="form-group">
+            <label for="periodeSelect">Periode Pembelajaran</label>
+            <select id="periodeSelect" aria-label="Periode Pembelajaran">
+              <option value="Semester 1" selected>Semester 1</option>
+              <option value="Semester 2">Semester 2</option>
+              <option value="1 Tahun Ajaran">1 Tahun Ajaran</option>
+            </select>
+          </div>
+
+          <!-- Mode Kalkulasi: JP/Minggu & Jumlah Pekan -->
+          <div id="jpPerWeekGroup" class="form-group">
+            <label for="jpPerWeekInput">JP per Minggu</label>
+            <input
+              type="number"
+              id="jpPerWeekInput"
+              min="1"
+              max="60"
+              step="1"
+              value="3"
+              aria-label="JP per Minggu"
+            />
+          </div>
+
+          <div id="weeksGroup" class="form-group">
+            <label for="weeksInput">Jumlah Pekan Efektif</label>
+            <input
+              type="number"
+              id="weeksInput"
+              min="1"
+              max="60"
+              step="1"
+              value="18"
+              aria-label="Jumlah Pekan Efektif"
+            />
+          </div>
+
+          <!-- Mode Langsung: Total JP -->
+          <div id="directJpGroup" class="form-group" style="display: none;">
+            <label for="directJpInput">Total Alokasi JP</label>
+            <input
+              type="number"
+              id="directJpInput"
+              min="1"
+              max="2000"
+              step="1"
+              value="54"
+              aria-label="Total Alokasi JP"
+            />
+          </div>
+        </div>
+
+        <div id="jpValidation" class="validation-msg" role="alert"></div>
+
+        <div class="jp-summary-banner" aria-live="polite">
+          <span class="jp-total-badge" id="jpTotalDisplay">Total Alokasi: 54 JP</span>
+          <span class="jp-formula-text" id="jpFormulaDisplay">Semester 1 · 3 JP/minggu × 18 pekan efektif</span>
+        </div>
+      </article>
+
+      <!-- Langkah 4: Instruksi Khusus -->
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="step-pill">4</span>
+            <div>
+              <h2 class="card-title">Instruksi Khusus</h2>
+              <p class="card-desc">Klik chip strategi pembelajaran dan tambahkan catatan tambahan bila diperlukan.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="chips-label-row">
+          <label>Chip Instruksi Cepat <span class="label-hint">(bisa pilih lebih dari satu)</span></label>
+          <button type="button" id="clearChipsBtn" class="chip-btn" style="min-height: 32px; padding: 0.25rem 0.65rem; font-size: 0.76rem;">
+            Bersihkan Chip
+          </button>
+        </div>
+
+        <div id="instructionChips" class="chips-container" role="group" aria-label="Pilihan Instruksi Khusus"></div>
+
+        <div class="form-group">
+          <label for="customInstructionInput">
+            Instruksi Tambahan / Catatan Khusus <span class="label-hint">(opsional)</span>
+          </label>
+          <textarea
+            id="customInstructionInput"
+            placeholder="Contoh: Fokus pada proyek mini kelompok, gunakan studi kasus lingkungan sekitar sekolah, dan susun urutan TP dari konsep dasar ke penerapan kompleks."
+          ></textarea>
+        </div>
+      </article>
+    </section>
+
+    <!-- Kolom Pratinjau Prompt AI -->
+    <section class="preview-column" aria-label="Hasil Prompt AI">
+      <article class="card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="step-pill">AI</span>
+            <div>
+              <h2 class="card-title">Pratinjau Prompt AI ATP</h2>
+              <p class="card-desc">Dapat diedit langsung sebelum disalin ke ChatGPT, Gemini, atau asisten AI lain.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="preview-meta">
+          <span id="promptStats">0 karakter · 0 kata</span>
+          <span id="syncStatus">Sinkron otomatis dengan input</span>
+        </div>
+
+        <textarea
+          id="promptOutput"
+          class="prompt-output"
+          aria-label="Teks Prompt AI yang Dihasilkan"
+          spellcheck="false"
+        ></textarea>
+
+        <div id="feedbackToast" class="feedback-toast" role="status" aria-live="polite"></div>
+
+        <div class="action-row" style="margin-top: 0.85rem;">
+          <button type="button" id="copyPromptBtn" class="btn btn-primary">
+            <span id="copyBtnIcon">📋</span>
+            <span id="copyBtnText">Salin Prompt</span>
+          </button>
+          <button type="button" id="resetAllBtn" class="btn btn-secondary">
+            <span>↺</span>
+            <span>Reset Pengaturan</span>
+          </button>
+        </div>
+
+        <div class="usage-tip">
+          <strong>Tips penggunaan:</strong> Setelah menyalin prompt ini ke AI, Anda juga dapat melampirkan dokumen
+          <em>Capaian Pembelajaran (CP)</em> terbaru mata pelajaran terkait agar rumusan elemen dan tujuan
+          pembelajaran semakin presisi sesuai regulasi satuan pendidikan Anda.
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <!-- Footer Kredit Pembuat Aplikasi -->
+  <footer class="app-footer" aria-label="Informasi Pembuat Aplikasi">
+    Generator Prompt AI ATP Kurikulum Merdeka &middot; Dibuat oleh <strong>Z. Asmarady</strong>
+  </footer>
+
+  <script>
+    (function () {
+      "use strict";
+
+      /* =====================================================================
+         1. DATA KURIKULUM & OPSI PILIHAN
+         ===================================================================== */
+      const JENJANG_CONFIG = {
+        "PAUD/TK": {
+          fases: [
+            {
+              value: "Fase Fondasi",
+              label: "Fase Fondasi",
+              kelas: ["TK A", "TK B", "TK A & TK B"]
+            }
+          ],
+          mapel: [
+            "Nilai Agama dan Budi Pekerti",
+            "Jati Diri",
+            "Dasar-Dasar Literasi, Matematika, Sains, Teknologi, Rekayasa, dan Seni",
+            "Projek Penguatan Profil Pelajar Pancasila (PAUD)",
+            "Kustom..."
+          ]
+        },
+        "SD/MI": {
+          fases: [
+            {
+              value: "Fase A",
+              label: "Fase A (Kelas 1–2)",
+              kelas: ["Kelas 1", "Kelas 2", "Kelas 1–2"]
+            },
+            {
+              value: "Fase B",
+              label: "Fase B (Kelas 3–4)",
+              kelas: ["Kelas 3", "Kelas 4", "Kelas 3–4"]
+            },
+            {
+              value: "Fase C",
+              label: "Fase C (Kelas 5–6)",
+              kelas: ["Kelas 5", "Kelas 6", "Kelas 5–6"]
+            }
+          ],
+          mapel: [
+            "Pendidikan Pancasila",
+            "PPKn",
+            "Bahasa Indonesia",
+            "Matematika",
+            "IPAS (Ilmu Pengetahuan Alam dan Sosial)",
+            "Bahasa Inggris",
+            "PJOK",
+            "Seni dan Budaya",
+            "Kustom..."
+          ]
+        },
+        "SMP/MTs": {
+          fases: [
+            {
+              value: "Fase D",
+              label: "Fase D (Kelas 7–9)",
+              kelas: ["Kelas 7", "Kelas 8", "Kelas 9", "Kelas 7–9"]
+            }
+          ],
+          mapel: [
+            "Pendidikan Pancasila",
+            "PPKn",
+            "Bahasa Indonesia",
+            "Matematika",
+            "IPA",
+            "IPS",
+            "Bahasa Inggris",
+            "Informatika",
+            "PJOK",
+            "Seni dan Budaya",
+            "Sejarah",
+            "Kustom..."
+          ]
+        },
+        "SMA/SMK/MA": {
+          fases: [
+            {
+              value: "Fase E",
+              label: "Fase E (Kelas 10)",
+              kelas: ["Kelas 10"]
+            },
+            {
+              value: "Fase F",
+              label: "Fase F (Kelas 11–12)",
+              kelas: ["Kelas 11", "Kelas 12", "Kelas 11–12"]
+            }
+          ],
+          mapel: [
+            "Pendidikan Pancasila",
+            "PPKn",
+            "Bahasa Indonesia",
+            "Matematika",
+            "Sejarah",
+            "Bahasa Inggris",
+            "Informatika",
+            "IPA (Fisika / Kimia / Biologi)",
+            "IPS (Ekonomi / Sosiologi / Geografi)",
+            "PJOK",
+            "Seni dan Budaya",
+            "Kustom..."
+          ]
+        }
+      };
+
+      const INSTRUCTION_CHIPS = [
+        {
+          id: "hots",
+          icon: "🧠",
+          label: "Berbasis HOTS",
+          detail: "Rumuskan TP yang mendorong keterampilan berpikir tingkat tinggi (menganalisis, mengevaluasi, dan mencipta) secara bertahap."
+        },
+        {
+          id: "diferensiasi",
+          icon: "🎯",
+          label: "Pembelajaran Berdiferensiasi",
+          detail: "Sertakan catatan penyesuaian/diferensiasi pembelajaran berdasarkan kesiapan belajar, minat, atau profil belajar peserta didik."
+        },
+        {
+          id: "kontekstual",
+          icon: "🌿",
+          label: "Kontekstual & Kearifan Lokal",
+          detail: "Hubungkan materi dan contoh penerapan TP dengan kehidupan sehari-hari serta potensi/kearifan lokal peserta didik."
+        },
+        {
+          id: "pbl-pjbl",
+          icon: "🛠️",
+          label: "Problem-Based Learning / PjBL",
+          detail: "Rancang alur yang mendukung pembelajaran berbasis masalah (PBL) atau proyek (PjBL) yang bermakna dan terukur."
+        },
+        {
+          id: "literasi-numerasi",
+          icon: "📚",
+          label: "Penguatan Literasi & Numerasi",
+          detail: "Integrasikan penguatan kompetensi literasi membaca, numerasi, dan bernalar kritis pada setiap tahapan alur."
+        },
+        {
+          id: "asesmen",
+          icon: "📝",
+          label: "Asesmen Formatif & Sumatif",
+          detail: "Cantumkan rekomendasi strategi asesmen formatif selama proses alur serta asesmen sumatif di akhir unit/lingkup materi."
+        }
+      ];
+
+      const DEFAULT_STATE = {
+        jenjang: "SMP/MTs",
+        customJenjang: "",
+        fase: "Fase D",
+        customFase: "",
+        kelas: "Kelas 8",
+        customKelas: "",
+        mapel: "Informatika",
+        customMapel: "",
+        jpMode: "calc", // "calc" | "direct"
+        periode: "Semester 1",
+        jpPerWeek: 3,
+        weeks: 18,
+        directJp: 54,
+        selectedChipIds: ["hots", "pbl-pjbl", "asesmen"],
+        customInstruction: ""
+      };
+
+      let state = cloneState(DEFAULT_STATE);
+      let isManualPromptEdit = false;
+
+      /* =====================================================================
+         2. REFERENSI ELEMEN DOM
+         ===================================================================== */
+      const els = {
+        jenjangSelect: document.getElementById("jenjangSelect"),
+        customJenjangBox: document.getElementById("customJenjangBox"),
+        customJenjangInput: document.getElementById("customJenjangInput"),
+
+        faseSelect: document.getElementById("faseSelect"),
+        customFaseBox: document.getElementById("customFaseBox"),
+        customFaseInput: document.getElementById("customFaseInput"),
+
+        kelasSelect: document.getElementById("kelasSelect"),
+        customKelasBox: document.getElementById("customKelasBox"),
+        customKelasInput: document.getElementById("customKelasInput"),
+
+        mapelSelect: document.getElementById("mapelSelect"),
+        customMapelInput: document.getElementById("customMapelInput"),
+        mapelValidation: document.getElementById("mapelValidation"),
+
+        modeCalcBtn: document.getElementById("modeCalcBtn"),
+        modeDirectBtn: document.getElementById("modeDirectBtn"),
+        periodeSelect: document.getElementById("periodeSelect"),
+        jpPerWeekGroup: document.getElementById("jpPerWeekGroup"),
+        weeksGroup: document.getElementById("weeksGroup"),
+        directJpGroup: document.getElementById("directJpGroup"),
+        jpPerWeekInput: document.getElementById("jpPerWeekInput"),
+        weeksInput: document.getElementById("weeksInput"),
+        directJpInput: document.getElementById("directJpInput"),
+        jpValidation: document.getElementById("jpValidation"),
+        jpTotalDisplay: document.getElementById("jpTotalDisplay"),
+        jpFormulaDisplay: document.getElementById("jpFormulaDisplay"),
+
+        instructionChips: document.getElementById("instructionChips"),
+        clearChipsBtn: document.getElementById("clearChipsBtn"),
+        customInstructionInput: document.getElementById("customInstructionInput"),
+
+        promptOutput: document.getElementById("promptOutput"),
+        promptStats: document.getElementById("promptStats"),
+        syncStatus: document.getElementById("syncStatus"),
+        feedbackToast: document.getElementById("feedbackToast"),
+        copyPromptBtn: document.getElementById("copyPromptBtn"),
+        copyBtnIcon: document.getElementById("copyBtnIcon"),
+        copyBtnText: document.getElementById("copyBtnText"),
+        resetAllBtn: document.getElementById("resetAllBtn")
+      };
+
+      /* =====================================================================
+         3. FUNGSI BANTU & PERHITUNGAN
+         ===================================================================== */
+      function cloneState(obj) {
+        return {
+          ...obj,
+          selectedChipIds: Array.isArray(obj.selectedChipIds) ? [...obj.selectedChipIds] : []
+        };
+      }
+
+      function computeJpDetails() {
+        if (state.jpMode === "direct") {
+          const rawTotal = Number(state.directJp);
+          const isValid = Number.isFinite(rawTotal) && rawTotal >= 1;
+          const totalJp = isValid ? Math.round(rawTotal) : 0;
+          return {
+            isValid,
+            totalJp,
+            summaryText: isValid
+              ? `${state.periode} · Total langsung ${totalJp} JP`
+              : `${state.periode} · Masukkan jumlah JP valid (minimal 1 JP)`
+          };
+        }
+
+        const rawJp = Number(state.jpPerWeek);
+        const rawWeeks = Number(state.weeks);
+        const isValid =
+          Number.isFinite(rawJp) &&
+          rawJp >= 1 &&
+          Number.isFinite(rawWeeks) &&
+          rawWeeks >= 1;
+
+        const jpPerWeek = isValid ? Math.round(rawJp) : 0;
+        const weeks = isValid ? Math.round(rawWeeks) : 0;
+        const totalJp = isValid ? jpPerWeek * weeks : 0;
+
+        return {
+          isValid,
+          jpPerWeek,
+          weeks,
+          totalJp,
+          summaryText: isValid
+            ? `${state.periode} · ${jpPerWeek} JP/minggu × ${weeks} pekan efektif`
+            : `${state.periode} · Masukkan JP/minggu dan jumlah pekan valid (minimal 1)`
+        };
+      }
+
+      function getResolvedIdentity() {
+        const jenjang =
+          state.jenjang === "__CUSTOM__"
+            ? state.customJenjang.trim() || "[Isi Jenjang Pendidikan]"
+            : state.jenjang;
+
+        const fase =
+          state.fase === "__CUSTOM__"
+            ? state.customFase.trim() || "[Isi Fase Kurikulum Merdeka]"
+            : state.fase;
+
+        const kelas =
+          state.kelas === "__CUSTOM__"
+            ? state.customKelas.trim() || "[Isi Kelas]"
+            : state.kelas;
+
+        const customMapelTrimmed = state.customMapel.trim();
+        let mapel = "";
+        if (state.mapel === "Kustom...") {
+          mapel = customMapelTrimmed || "[Isi Nama Mata Pelajaran]";
+        } else if (customMapelTrimmed) {
+          mapel = customMapelTrimmed;
+        } else {
+          mapel = state.mapel || "[Pilih Mata Pelajaran]";
+        }
+
+        return { jenjang, fase, kelas, mapel };
+      }
+
+      function getSelectedInstructionDetails() {
+        const chipLines = INSTRUCTION_CHIPS
+          .filter((chip) => state.selectedChipIds.includes(chip.id))
+          .map((chip) => `- [${chip.label}] ${chip.detail}`);
+
+        const customTrimmed = state.customInstruction.trim();
+        if (customTrimmed) {
+          chipLines.push(`- [Catatan Tambahan Guru] ${customTrimmed}`);
+        }
+
+        return chipLines;
+      }
+
+      /* =====================================================================
+         4. SINKRONISASI DROPDOWN DINAMIS (JENJANG -> FASE & KELAS & MAPEL)
+         ===================================================================== */
+      function populateFaseAndKelasOptions(preferredFase, preferredKelas) {
+        const config = JENJANG_CONFIG[state.jenjang];
+
+        els.faseSelect.innerHTML = "";
+        if (config) {
+          config.fases.forEach((f) => {
+            const opt = document.createElement("option");
+            opt.value = f.value;
+            opt.textContent = f.label;
+            els.faseSelect.appendChild(opt);
+          });
+        }
+
+        const customFaseOpt = document.createElement("option");
+        customFaseOpt.value = "__CUSTOM__";
+        customFaseOpt.textContent = "Kustom / Lainnya...";
+        els.faseSelect.appendChild(customFaseOpt);
+
+        if (preferredFase && Array.from(els.faseSelect.options).some((o) => o.value === preferredFase)) {
+          state.fase = preferredFase;
+        } else if (config && config.fases.length > 0) {
+          state.fase = config.fases[0].value;
+        } else {
+          state.fase = "__CUSTOM__";
+        }
+        els.faseSelect.value = state.fase;
+
+        populateKelasOptions(preferredKelas);
+      }
+
+      function populateKelasOptions(preferredKelas) {
+        const config = JENJANG_CONFIG[state.jenjang];
+        const faseObj = config ? config.fases.find((f) => f.value === state.fase) : null;
+
+        els.kelasSelect.innerHTML = "";
+        if (faseObj && Array.isArray(faseObj.kelas)) {
+          faseObj.kelas.forEach((k) => {
+            const opt = document.createElement("option");
+            opt.value = k;
+            opt.textContent = k;
+            els.kelasSelect.appendChild(opt);
+          });
+        }
+
+        const customKelasOpt = document.createElement("option");
+        customKelasOpt.value = "__CUSTOM__";
+        customKelasOpt.textContent = "Kustom / Lainnya...";
+        els.kelasSelect.appendChild(customKelasOpt);
+
+        if (preferredKelas && Array.from(els.kelasSelect.options).some((o) => o.value === preferredKelas)) {
+          state.kelas = preferredKelas;
+        } else if (faseObj && faseObj.kelas.length > 0) {
+          state.kelas = faseObj.kelas[0];
+        } else {
+          state.kelas = "__CUSTOM__";
+        }
+        els.kelasSelect.value = state.kelas;
+
+        updateCustomBoxesVisibility();
+      }
+
+      function populateMapelOptions(preferredMapel) {
+        const config = JENJANG_CONFIG[state.jenjang];
+        const mapelList = config
+          ? config.mapel
+          : [
+              "Pendidikan Pancasila",
+              "PPKn",
+              "Bahasa Indonesia",
+              "Matematika",
+              "Bahasa Inggris",
+              "Informatika",
+              "Sejarah",
+              "PJOK",
+              "Kustom..."
+            ];
+
+        els.mapelSelect.innerHTML = "";
+        mapelList.forEach((m) => {
+          const opt = document.createElement("option");
+          opt.value = m;
+          opt.textContent = m;
+          els.mapelSelect.appendChild(opt);
+        });
+
+        if (preferredMapel && mapelList.includes(preferredMapel)) {
+          state.mapel = preferredMapel;
+        } else {
+          state.mapel = mapelList[0] || "Kustom...";
+        }
+        els.mapelSelect.value = state.mapel;
+      }
+
+      function updateCustomBoxesVisibility() {
+        els.customJenjangBox.classList.toggle("is-visible", state.jenjang === "__CUSTOM__");
+        els.customFaseBox.classList.toggle("is-visible", state.fase === "__CUSTOM__");
+        els.customKelasBox.classList.toggle("is-visible", state.kelas === "__CUSTOM__");
+      }
+
+      /* =====================================================================
+         5. RENDER CHIPS INSTRUKSI KHUSUS
+         ===================================================================== */
+      function renderInstructionChips() {
+        els.instructionChips.innerHTML = "";
+        INSTRUCTION_CHIPS.forEach((chip) => {
+          const isSelected = state.selectedChipIds.includes(chip.id);
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "chip-btn" + (isSelected ? " is-selected" : "");
+          btn.setAttribute("aria-pressed", String(isSelected));
+          btn.dataset.chipId = chip.id;
+          btn.innerHTML = `<span class="chip-icon" aria-hidden="true">${chip.icon}</span><span>${chip.label}</span>`;
+
+          btn.addEventListener("click", function () {
+            isManualPromptEdit = false;
+            if (state.selectedChipIds.includes(chip.id)) {
+              state.selectedChipIds = state.selectedChipIds.filter((id) => id !== chip.id);
+            } else {
+              state.selectedChipIds.push(chip.id);
+            }
+            renderInstructionChips();
+            updatePromptAndUi();
+          });
+
+          els.instructionChips.appendChild(btn);
+        });
+      }
+
+      /* =====================================================================
+         6. GENERASI TEKS PROMPT & VALIDASI
+         ===================================================================== */
+      function buildPromptText() {
+        const { jenjang, fase, kelas, mapel } = getResolvedIdentity();
+        const jpInfo = computeJpDetails();
+        const instructionLines = getSelectedInstructionDetails();
+
+        const jpLine =
+          state.jpMode === "calc" && jpInfo.isValid
+            ? `${jpInfo.totalJp} JP (${state.periode}, ${jpInfo.jpPerWeek} JP/minggu × ${jpInfo.weeks} pekan efektif)`
+            : jpInfo.isValid
+              ? `${jpInfo.totalJp} JP (${state.periode})`
+              : `[Tentukan Total JP untuk ${state.periode}]`;
+
+        const instructionsBlock =
+          instructionLines.length > 0
+            ? instructionLines.join("\n")
+            : "- Susun TP secara berurutan dari pemahaman konsep dasar ke penerapan yang lebih kompleks serta cantumkan rekomendasi asesmen yang relevan.";
+
+        return [
+          "Bertindaklah sebagai pakar kurikulum nasional dan perancang pembelajaran (instructional designer) yang menguasai Kurikulum Merdeka secara mendalam.",
+          "",
+          "Susunlah draf Alur Tujuan Pembelajaran (ATP) yang sistematis, terukur, dan operasional berdasarkan spesifikasi berikut:",
+          "",
+          "=== 1. IDENTITAS PEMBELAJARAN ===",
+          `- Jenjang Pendidikan : ${jenjang}`,
+          `- Fase              : ${fase}`,
+          `- Kelas             : ${kelas}`,
+          `- Mata Pelajaran    : ${mapel}`,
+          "",
+          "=== 2. ALOKASI PELAJARAN (JP) ===",
+          `- Periode & Total JP: ${jpLine}`,
+          "- Aturan Distribusi : Bagilah total JP secara proporsional dan logis ke seluruh tahapan/unit alur TP sehingga jumlah seluruh JP sama persis dengan total alokasi waktu yang ditetapkan.",
+          "",
+          "=== 3. INSTRUKSI KHUSUS & PENDEKATAN ===",
+          instructionsBlock,
+          "",
+          "=== 4. KETENTUAN PERUMUSAN & FORMAT KELUARAN ===",
+          "1. Setiap Tujuan Pembelajaran (TP) wajib memuat kompetensi (kata kerja operasional yang terukur), konten/materi esensial, dan konteks penerapan yang jelas.",
+          "2. Urutkan alur TP secara logis (dari konsep/keterampilan prasyarat ke tingkat yang lebih kompleks/aplikatif).",
+          "3. Sajikan hasil dalam struktur berikut:",
+          "   a) Ringkasan Identitas & Total Alokasi JP",
+          "   b) Tabel ATP dengan kolom: No. Alur | Elemen / Materi Pokok | Rumusan Tujuan Pembelajaran (TP) | Alokasi JP | Strategi & Catatan Instruksi Khusus",
+          "   c) Rekapitulasi pengecekan total JP di akhir tabel untuk memastikan kesesuaian dengan alokasi waktu."
+        ].join("\n");
+      }
+
+      function validateInputs() {
+        const { mapel } = getResolvedIdentity();
+        const jpInfo = computeJpDetails();
+
+        if (!mapel || mapel.startsWith("[")) {
+          els.mapelValidation.textContent = "Silakan pilih mata pelajaran atau isi nama mata pelajaran kustom.";
+        } else {
+          els.mapelValidation.textContent = "";
+        }
+
+        if (!jpInfo.isValid) {
+          els.jpValidation.textContent = "Pastikan nilai JP/minggu, jumlah pekan, atau total JP bernilai minimal 1.";
+        } else {
+          els.jpValidation.textContent = "";
+        }
+      }
+
+      function updateJpSummary() {
+        const jpInfo = computeJpDetails();
+        els.jpTotalDisplay.textContent = jpInfo.isValid
+          ? `Total Alokasi: ${jpInfo.totalJp} JP`
+          : "Total Alokasi: — JP";
+        els.jpFormulaDisplay.textContent = jpInfo.summaryText;
+      }
+
+      function updatePromptStats(text) {
+        const chars = text.length;
+        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+        els.promptStats.textContent = `${chars} karakter · ${words} kata`;
+      }
+
+      function updatePromptAndUi() {
+        updateJpSummary();
+        validateInputs();
+
+        if (!isManualPromptEdit) {
+          const generated = buildPromptText();
+          els.promptOutput.value = generated;
+          els.syncStatus.textContent = "Sinkron otomatis dengan input";
+          updatePromptStats(generated);
+        } else {
+          els.syncStatus.textContent = "Diedit manual (klik Reset untuk sinkron ulang)";
+          updatePromptStats(els.promptOutput.value);
+        }
+      }
+
+      /* =====================================================================
+         7. FEEDBACK & SALIN KE CLIPBOARD (DENGAN FALLBACK AMAN)
+         ===================================================================== */
+      function showToast(message, variant) {
+        els.feedbackToast.textContent = message;
+        els.feedbackToast.className = `feedback-toast is-visible is-${variant || "info"}`;
+      }
+
+      function hideToast() {
+        els.feedbackToast.className = "feedback-toast";
+        els.feedbackToast.textContent = "";
+      }
+
+      function copyPromptToClipboard() {
+        const textToCopy = els.promptOutput.value;
+        if (!textToCopy.trim()) {
+          showToast("Teks prompt masih kosong. Lengkapi pengaturan terlebih dahulu.", "info");
+          return;
+        }
+
+        const onSuccess = function () {
+          els.copyPromptBtn.classList.add("is-copied");
+          els.copyBtnIcon.textContent = "✓";
+          els.copyBtnText.textContent = "Tersalin!";
+          showToast("Prompt AI berhasil disalin ke clipboard. Siap ditempel ke AI pilihan Anda.", "success");
+
+          window.setTimeout(function () {
+            els.copyPromptBtn.classList.remove("is-copied");
+            els.copyBtnIcon.textContent = "📋";
+            els.copyBtnText.textContent = "Salin Prompt";
+          }, 2200);
+        };
+
+        const onFallback = function () {
+          try {
+            els.promptOutput.focus();
+            els.promptOutput.select();
+            const copied = document.execCommand("copy");
+            if (copied) {
+              onSuccess();
+            } else {
+              showToast("Silakan tekan Ctrl+C / Cmd+C pada kotak prompt untuk menyalin teks.", "info");
+            }
+          } catch (err) {
+            showToast("Salin otomatis tidak didukung di browser ini. Gunakan Ctrl+C / Cmd+C.", "info");
+          }
+        };
+
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+          navigator.clipboard.writeText(textToCopy).then(onSuccess).catch(onFallback);
+        } else {
+          onFallback();
+        }
+      }
+
+      /* =====================================================================
+         8. MODE ALOKASI JP & RESET PENGATURAN
+         ===================================================================== */
+      function setJpMode(mode) {
+        state.jpMode = mode === "direct" ? "direct" : "calc";
+        const isCalc = state.jpMode === "calc";
+
+        els.modeCalcBtn.classList.toggle("is-active", isCalc);
+        els.modeCalcBtn.setAttribute("aria-selected", String(isCalc));
+
+        els.modeDirectBtn.classList.toggle("is-active", !isCalc);
+        els.modeDirectBtn.setAttribute("aria-selected", String(!isCalc));
+
+        els.jpPerWeekGroup.style.display = isCalc ? "" : "none";
+        els.weeksGroup.style.display = isCalc ? "" : "none";
+        els.directJpGroup.style.display = isCalc ? "none" : "";
+
+        isManualPromptEdit = false;
+        updatePromptAndUi();
+      }
+
+      function applyStateToControls() {
+        els.jenjangSelect.value = state.jenjang;
+        els.customJenjangInput.value = state.customJenjang;
+
+        populateFaseAndKelasOptions(state.fase, state.kelas);
+        els.customFaseInput.value = state.customFase;
+        els.customKelasInput.value = state.customKelas;
+
+        populateMapelOptions(state.mapel);
+        els.customMapelInput.value = state.customMapel;
+
+        els.periodeSelect.value = state.periode;
+        els.jpPerWeekInput.value = String(state.jpPerWeek);
+        els.weeksInput.value = String(state.weeks);
+        els.directJpInput.value = String(state.directJp);
+
+        els.customInstructionInput.value = state.customInstruction;
+
+        const isCalc = state.jpMode === "calc";
+        els.modeCalcBtn.classList.toggle("is-active", isCalc);
+        els.modeCalcBtn.setAttribute("aria-selected", String(isCalc));
+        els.modeDirectBtn.classList.toggle("is-active", !isCalc);
+        els.modeDirectBtn.setAttribute("aria-selected", String(!isCalc));
+        els.jpPerWeekGroup.style.display = isCalc ? "" : "none";
+        els.weeksGroup.style.display = isCalc ? "" : "none";
+        els.directJpGroup.style.display = isCalc ? "none" : "";
+
+        renderInstructionChips();
+        updatePromptAndUi();
+      }
+
+      function resetAllSettings() {
+        state = cloneState(DEFAULT_STATE);
+        isManualPromptEdit = false;
+        hideToast();
+        applyStateToControls();
+        showToast("Semua pengaturan telah dikembalikan ke nilai awal.", "info");
+      }
+
+      /* =====================================================================
+         9. PENDAFTARAN EVENT LISTENERS
+         ===================================================================== */
+      function bindEvents() {
+        els.jenjangSelect.addEventListener("change", function () {
+          isManualPromptEdit = false;
+          state.jenjang = els.jenjangSelect.value;
+          populateFaseAndKelasOptions(null, null);
+          populateMapelOptions(null);
+          updatePromptAndUi();
+        });
+
+        els.customJenjangInput.addEventListener("input", function () {
+          isManualPromptEdit = false;
+          state.customJenjang = els.customJenjangInput.value;
+          updatePromptAndUi();
+        });
+
+        els.faseSelect.addEventListener("change", function () {
+          isManualPromptEdit = false;
+          state.fase = els.faseSelect.value;
+          populateKelasOptions(null);
+          updatePromptAndUi();
+        });
+
+        els.customFaseInput.addEventListener("input", function () {
+          isManualPromptEdit = false;
+          state.customFase = els.customFaseInput.value;
+          updatePromptAndUi();
+        });
+
+        els.kelasSelect.addEventListener("change", function () {
+          isManualPromptEdit = false;
+          state.kelas = els.kelasSelect.value;
+          updateCustomBoxesVisibility();
+          updatePromptAndUi();
+        });
+
+        els.customKelasInput.addEventListener("input", function () {
+          isManualPromptEdit = false;
+          state.customKelas = els.customKelasInput.value;
+          updatePromptAndUi();
+        });
+
+        els.mapelSelect.addEventListener("change", function () {
+          isManualPromptEdit = false;
+          state.mapel = els.mapelSelect.value;
+          if (state.mapel === "Kustom...") {
+            els.customMapelInput.focus();
+          }
+          updatePromptAndUi();
+        });
+
+        els.customMapelInput.addEventListener("input", function () {
+          isManualPromptEdit = false;
+          state.customMapel = els.customMapelInput.value;
+          updatePromptAndUi();
+        });
+
+        els.modeCalcBtn.addEventListener("click", function () {
+          setJpMode("calc");
+        });
+
+        els.modeDirectBtn.addEventListener("click", function () {
+          setJpMode("direct");
+        });
+
+        els.periodeSelect.addEventListener("change", function () {
+          isManualPromptEdit = false;
+          state.periode = els.periodeSelect.value;
+          updatePromptAndUi();
+        });
+
+        els.jpPerWeekInput.addEventListener("input", function () {
+          isManualPromptEdit = false;
+          state.jpPerWeek = els.jpPerWeekInput.value;
+          updatePromptAndUi();
+        });
+
+        els.weeksInput.addEventListener("input", function () {
+          isManualPromptEdit = false;
+          state.weeks = els.weeksInput.value;
+          updatePromptAndUi();
+        });
+
+        els.directJpInput.addEventListener("input", function () {
+          isManualPromptEdit = false;
+          state.directJp = els.directJpInput.value;
+          updatePromptAndUi();
+        });
+
+        els.clearChipsBtn.addEventListener("click", function () {
+          isManualPromptEdit = false;
+          state.selectedChipIds = [];
+          renderInstructionChips();
+          updatePromptAndUi();
+        });
+
+        els.customInstructionInput.addEventListener("input", function () {
+          isManualPromptEdit = false;
+          state.customInstruction = els.customInstructionInput.value;
+          updatePromptAndUi();
+        });
+
+        els.promptOutput.addEventListener("input", function () {
+          isManualPromptEdit = true;
+          els.syncStatus.textContent = "Diedit manual (klik Reset untuk sinkron ulang)";
+          updatePromptStats(els.promptOutput.value);
+        });
+
+        els.copyPromptBtn.addEventListener("click", copyPromptToClipboard);
+        els.resetAllBtn.addEventListener("click", resetAllSettings);
+      }
+
+      /* =====================================================================
+         10. INISIALISASI APLIKASI
+         ===================================================================== */
+      bindEvents();
+      applyStateToControls();
+    })();
+  </script>
+</body>
+</html>
